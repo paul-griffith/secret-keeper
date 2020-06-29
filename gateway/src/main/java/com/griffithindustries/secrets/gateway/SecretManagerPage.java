@@ -5,7 +5,7 @@ import com.inductiveautomation.ignition.gateway.web.components.RecordActionTable
 import com.inductiveautomation.ignition.gateway.web.pages.IConfigPage;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static com.griffithindustries.secrets.gateway.SecretKeeperGatewayHook.CATEGORY;
+import static com.inductiveautomation.ignition.gateway.web.models.ConfigCategory.SECURITY;
 
 public class SecretManagerPage extends RecordActionTable<SecretRecord> {
     public SecretManagerPage(IConfigPage configPage) {
@@ -19,6 +19,6 @@ public class SecretManagerPage extends RecordActionTable<SecretRecord> {
 
     @Override
     public Pair<String, String> getMenuLocation() {
-        return Pair.of(CATEGORY.getName(), "secrets");
+        return Pair.of(SECURITY.getName(), "secrets");
     }
 }

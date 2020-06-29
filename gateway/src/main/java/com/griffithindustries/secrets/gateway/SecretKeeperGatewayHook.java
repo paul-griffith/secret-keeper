@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
+import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.common.project.resource.adapter.ResourceTypeAdapterRegistry;
 import com.inductiveautomation.ignition.common.script.ScriptManager;
@@ -25,21 +26,16 @@ import org.jfree.util.Log;
  * Class which is instantiated by the Ignition platform when the module is loaded in the gateway scope.
  */
 public class SecretKeeperGatewayHook extends AbstractGatewayModuleHook {
-    public static final ConfigCategory CATEGORY = new ConfigCategory(
-        "secrets",
-        "configMenuTitle",
-        400
-    );
-
     private static final IConfigTab TAB = DefaultConfigTab.builder()
-        .category(CATEGORY)
+        .category(ConfigCategory.SECURITY)
         .name("secrets")
         .i18n("config.secrets.MenuTitle")
         .page(SecretManagerPage.class)
-        .terms("twilio", "twilio settings", "twilio accounts")
+        .terms("secrets", "keys", "api keys")
         .build();
 
     private static final LoggerEx LOG = LoggerEx.newBuilder().build("SecretKeeper");
+
     private GatewayContext context;
 
     /**
@@ -50,6 +46,9 @@ public class SecretKeeperGatewayHook extends AbstractGatewayModuleHook {
     @Override
     public void setup(GatewayContext context) {
         this.context = context;
+
+        BundleUtil.get().addBundle("SecretKeeper", getClass(), "SecretKeeper");
+
         try {
             context.getSchemaUpdater().updatePersistentRecords(SecretRecord.META);
         } catch (SQLException e) {
@@ -57,22 +56,14 @@ public class SecretKeeperGatewayHook extends AbstractGatewayModuleHook {
         }
     }
 
-    /**
-     * Called to initialize the module. Will only be called once. Persistence interface is available, but only in
-     * read-only mode.
-     */
     @Override
-    public void startup(LicenseState activationState) {
-
+    public void startup(LicenseState licenseState) {
+        //no-op
     }
 
-    /**
-     * Called to shutdown this module. Note that this instance will never be started back up - a new one will be created
-     * if a restart is desired
-     */
     @Override
     public void shutdown() {
-
+        //no-op
     }
 
     /**
@@ -83,15 +74,6 @@ public class SecretKeeperGatewayHook extends AbstractGatewayModuleHook {
     @Override
     public List<? extends IConfigTab> getConfigPanels() {
         return List.of(TAB);
-    }
-
-    /**
-     * A list (may be null or empty) of custom config categories needed by any panels returned by  {@link
-     * #getConfigPanels()}
-     */
-    @Override
-    public List<ConfigCategory> getConfigCategories() {
-        return List.of(CATEGORY);
     }
 
     @Override
