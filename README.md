@@ -1,23 +1,32 @@
-### Secret Keeper
-##### Information
-This repository will generate a module in Ignition that allows you to store passwords within the Ignition database.
-Stored passwords are encrypted and stored in the GI_SECRETS table of Ignition's SQLite database.
+# Secret Keeper
 
-##### Cautions
-While this module stores encrypted password within Ignition, the encryption is reversible.  Anyone that has a backup of
-your Ignition Gateway can gain access to the stored values.
+## About
+This repository will generate a module in Ignition that allows you to store and retrieve password, API tokens, or other sensitive information within Ignition.
+Secrets are stored (hashed and salted) in the `GI_SECRETS` table of Ignition's internal database.
 
-##### Building
-###### Pre-Reqs:
+### Warning
+While this module stores the password encrypted, that encryption is reversible. Anyone that has a backup of your Ignition Gateway can gain access to the stored values.
+In addition, script authors can (within the gateway scope) retrieve secret values as plain strings, which could be accidentally emitted in logs or error messages.
+
+## Building
+### Requirements
 * Java 11
-* A Java IDE (IntelliJ or Eclipse)
-* [All requirements satisfied for ignition-sdk-examples github repository](https://github.com/inductiveautomation/ignition-sdk-examples#requirements)
+* If you choose to use Maven to build, it must be installed on your system
 
-###### Building:
+### Recommended
+* [Requirements from the `ignition-sdk-examples` repo](https://github.com/inductiveautomation/ignition-sdk-examples#requirements)
+
+### Building
+
+#### Maven
 1. Open a terminal window or command prompt
 2. Change directory to this cloned repository
 3. Run the command: `mvn clean package`
 
-This will create an unsigned module file `secret-keeper-build/target/Secret-Keeper-unsigned.modl`.  The
- `ignition-sdk-examples` repository details how to set up Ignition to allow unsigned modules to be installed.  If you need 
-sign a module, please look at [Inductive Automation's module-signer repository](https://github.com/inductiveautomation/module-signer).
+This will create an unsigned module file `secret-keeper-build/target/Secret-Keeper-unsigned.modl`. The `ignition-sdk-examples` repository details how to set up Ignition to allow unsigned modules to be installed. 
+If you need to sign a module, please look at [Inductive Automation's module-signer repository](https://github.com/inductiveautomation/module-signer).
+
+#### Gradle
+1. Open a terminal window or command prompt
+2. Change directory to this cloned repository
+3. Run the `gradlew` executable; *Nix systems: `./gradlew`, Windows `gradlew.bat`.

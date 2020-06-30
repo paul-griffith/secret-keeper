@@ -1,0 +1,5 @@
+dependencies {
+    compileOnly 'com.inductiveautomation.ignitionsdk:ignition-common:8.0.14'
+    compileOnly 'com.inductiveautomation.ignitionsdk:gateway-api:8.0.14'
+    compileOnly 'com.inductiveautomation.ignitionsdk:driver-api:8.0.14'
+}

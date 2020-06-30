@@ -1,21 +1,15 @@
 package com.griffithindustries.secrets.SecretKeeper.web;
 
 import com.griffithindustries.secrets.SecretKeeper.records.SKSettingsRecord;
+import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRecord;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.web.components.RecordActionTable;
-import com.inductiveautomation.ignition.gateway.web.components.RecordEditForm;
+import com.inductiveautomation.ignition.gateway.web.models.ConfigCategory;
 import com.inductiveautomation.ignition.gateway.web.pages.IConfigPage;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static com.griffithindustries.secrets.SecretKeeper.GatewayHook.CONFIG_CATEGORY;
-
 /**
- * Filename: SKSettingsPage
- * Author: Garth Gross
- * Created on: 2020-06-29
- * Project: secret keeper
- *
- * SKSettings extends  {@link RecordEditForm} to provide a page where we can edit records in our PersistentRecord.
+ * SKSettings extends {@link RecordActionTable} to use the gateway's built in UI for editing {@link PersistentRecord}s
  */
 public class SKSettingsPage extends RecordActionTable<SKSettingsRecord> {
     public SKSettingsPage(IConfigPage configPage) {super(configPage); }
@@ -27,7 +21,6 @@ public class SKSettingsPage extends RecordActionTable<SKSettingsRecord> {
 
     @Override
     public Pair<String, String> getMenuLocation() {
-        return Pair.of(CONFIG_CATEGORY.getName(), "Secret Keeper");
+        return Pair.of(ConfigCategory.SECURITY.getName(), "Secret Keeper");
     }
-
 }
