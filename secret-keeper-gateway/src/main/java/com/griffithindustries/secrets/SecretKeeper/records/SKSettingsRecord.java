@@ -1,6 +1,5 @@
-package com.griffithindustries.secrets.gateway;
+package com.griffithindustries.secrets.SecretKeeper.records;
 
-import com.inductiveautomation.ignition.common.util.ResourceUtil;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.EncodedStringField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;
@@ -8,35 +7,34 @@ import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRe
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;
 import com.inductiveautomation.ignition.gateway.web.components.editors.PasswordEditorSource;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import simpleorm.dataset.SFieldFlags;
 
-public class SecretRecord extends PersistentRecord {
-    public static final RecordMeta<SecretRecord> META =
-        new RecordMeta<>(SecretRecord.class, "gi_secrets");
+/**
+ * Filename: SKSettingsRecord
+ * Author: Garth Gross
+ * Created on: 2020-06-29
+ * Project: secret keeper
+ */
+public class SKSettingsRecord extends PersistentRecord {
 
-    public static final IdentityField Id = new IdentityField(META, "Id");
+    public static final RecordMeta<SKSettingsRecord> META = new RecordMeta<SKSettingsRecord>(
+            SKSettingsRecord.class, "gi_secrets")
+                .setNounKey("SKSettingsRecord.Noun")
+                .setNounPluralKey("SKSettingsRecord.Noun.Plural");
+
+    public static final IdentityField Id = new IdentityField(META);
 
     public static final StringField Name = new StringField(META, "Name", SFieldFlags.SMANDATORY,
         SFieldFlags.SDESCRIPTIVE);
 
     public static final EncodedStringField Secret = new EncodedStringField(META, "Secret", SFieldFlags.SMANDATORY);
 
-    static final Category Main = new Category("SecretKeeper.Category", 0).include(Name, Secret);
+    // create categories for our record entries, getting titles from the SKSettingsRecord.properties, and
+    // ordering through integer ranking
+    static final Category Secrets = new Category("SKSettingsRecord.Category.Secret", 1000).include(Name, Secret);
 
     static {
         Secret.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
-        Name.addValidator(new IValidator<String>() {
-            @Override
-            public void validate(IValidatable validatable) {
-                String value = (String) validatable.getValue();
-                if (!ResourceUtil.isLegalName(value)) {
-                    validatable.error(new ValidationError(this).addKey("SecretKeeper.Validator.Error"));
-                }
-            }
-        });
     }
 
     @Override
