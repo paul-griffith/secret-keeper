@@ -1,7 +1,6 @@
 package com.griffithindustries.secrets.SecretKeeper;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
 import com.griffithindustries.secrets.SecretKeeper.web.SKSettingsPage;
@@ -19,31 +18,12 @@ import com.inductiveautomation.ignition.gateway.web.models.DefaultConfigTab;
 import com.inductiveautomation.ignition.gateway.web.models.IConfigTab;
 
 /**
- * Filename: GatewayHook.java
- * Author: Garth Gross
- * Created on: 2020-06-29
- * Project: secret keeper
- *
  * The "gateway hook" is the entry point for a module on the gateway.
  *
  * This example uses the new status and config pages for 7.9 and later.
- *
  */
 public class GatewayHook extends AbstractGatewayModuleHook {
-    private GatewayContext context;
-
-    private static final LoggerEx log = LoggerEx.newBuilder().build("SecretKeeper");
-
-    /**
-     * This sets up the config panel
-     */
-    public static final ConfigCategory CONFIG_CATEGORY =
-        new ConfigCategory("Secret Keeper", "SecretKeeper.nav.header", 700);
-
-    @Override
-    public List<ConfigCategory> getConfigCategories() {
-        return Collections.singletonList(CONFIG_CATEGORY);
-    }
+    private static final LoggerEx LOG = LoggerEx.newBuilder().build("SecretKeeper");
 
     /**
      * An IConfigTab contains all the info necessary to create a link to your config page on the gateway nav menu.
@@ -52,52 +32,52 @@ public class GatewayHook extends AbstractGatewayModuleHook {
      * lines up with SKSettingsPage#getMenuLocation().getRight()
      */
     public static final IConfigTab SK_CONFIG_ENTRY = DefaultConfigTab.builder()
-            .category(CONFIG_CATEGORY)
+            .category(ConfigCategory.SECURITY)
             .name("Secret Keeper")
             .i18n("SecretKeeper.nav.settings.title")
             .page(SKSettingsPage.class)
-            .terms("secret keeper password api")
+            .terms("secret", "keeper", "password", "api", "key")
             .build();
 
-    @Override
-    public List<? extends IConfigTab> getConfigPanels() {
-        return Collections.singletonList(
-            SK_CONFIG_ENTRY
-        );
-    }
+    private GatewayContext context;
 
     @Override
     public void setup(GatewayContext gatewayContext) {
         this.context = gatewayContext;
 
-        log.debug("Beginning setup of SecretKeeper Module");
+        LOG.debug("Beginning setup of SecretKeeper module");
 
         // Register GatewayHook.properties by registering the GatewayHook.class with BundleUtils
         BundleUtil.get().addBundle("SecretKeeper", getClass(), "SecretKeeper");
 
-        //Verify tables for persistent records if necessary
-        verifySchema(context);
+        // Verify tables for persistent records if necessary
+        verifySchema();
 
-        log.debug("Setup Complete.");
+        LOG.debug("SecretKeeper setup completed");
     }
 
-    private void verifySchema(GatewayContext context) {
+    private void verifySchema() {
         try {
             context.getSchemaUpdater().updatePersistentRecords(SKSettingsRecord.META);
         } catch (SQLException e) {
-            log.error("Unable to create required internal DB table", e);
+            LOG.error("Unable to create required internal DB table", e);
         }
     }
 
     @Override
     public void startup(LicenseState activationState) {
-
+        //no-op
     }
 
     @Override
     public void shutdown() {
         /* remove our bundle */
         BundleUtil.get().removeBundle("SecretKeeper");
+    }
+
+    @Override
+    public List<? extends IConfigTab> getConfigPanels() {
+        return List.of(SK_CONFIG_ENTRY);
     }
 
     @Override

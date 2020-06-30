@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        maven { url "https://nexus.inductiveautomation.com/repository/public" }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'secret-keeper'
+include(':secret-keeper-gateway')
+include(':secret-keeper-build')
