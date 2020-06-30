@@ -10,12 +10,12 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gateway-webpage-build</artifactId>
+    <artifactId>secret-keeper-build</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.griffithindustries.secrets.SecretKeeper</groupId>
-            <artifactId>gateway-webpage-gateway</artifactId>
+            <artifactId>secret-keeper-gateway</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -40,7 +40,7 @@
                 <configuration>
                     <projectScopes>
                         <projectScope>
-                            <name>gateway-webpage-gateway</name>
+                            <name>secret-keeper-gateway</name>
                             <scope>G</scope>
                         </projectScope>
                     </projectScopes>
